@@ -1,6 +1,5 @@
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
 import 'https://code.jquery.com/jquery-3.6.0.min.js';
-import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css';
 let url = "https://cdn.jsdelivr.net/gh/NicolasSponton/IpCallWidget@master/index.html"
 
 window.onload = function() {
