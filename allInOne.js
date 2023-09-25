@@ -50,8 +50,6 @@ window.onload = function() {
                 socket.on('c' + state.conversationId, handleReceivedMessage)
             }
 
-            console.log("state; ", state.logged);
-
             if(state.logged){
                 form.style.display = 'none';
                 addMessage('¿En que podemos alludarte?', 'other')
@@ -60,7 +58,9 @@ window.onload = function() {
             }
 
             function handleReceivedMessage(res) {
-                addMessage(res.data.message.message, res.data.message.from_me ? 'other' : 'self')
+                if(res.data.message.from_me) {
+                    addMessage(res.data.message.message, 'other')
+                }
             }
 
             setTimeout(function() {
@@ -116,10 +116,15 @@ window.onload = function() {
                         conversationId: state.conversationId,
                     })
                 })
-                .then(res => res.json())
-                .then(res => {
-                    if(state.conversationId !== res?.conversationId){
-                        state.conversationId = res?.conversationId
+                .then(res => Promise.all([res,res.json()]))
+                .then(([res,json]) => {
+
+                    if(res.ok){
+                        addMessage(newMessage, 'self')
+                    }
+
+                    if(state.conversationId !== json?.conversationId){
+                        state.conversationId = json?.conversationId
                         localStorage.setItem('ipChatState',JSON.stringify(state))
                         if(Boolean(state.conversationId)){
                             console.log("Escuchando: ====== "+ state.conversationId +" ======");
